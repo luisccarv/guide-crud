@@ -11,7 +11,7 @@
     console.log('Hey, guys! - Part 2');
     console.log('#Building CRUD (Create, Read, Update, Delete)');
 
-    // Base de Dados
+    // Base de Dados [ Modelo ]
     const twitterLite = {
         users: [
             {
@@ -26,33 +26,35 @@
             }
         ],
 
-        addPost(data) {
-            // Cria Post na Memória (Array/Objeto)
-            twitterLite.posts.push({
-                id: twitterLite.posts.length + 1,
-                owner: data.owner,
-                content: data.content
-            });
+        addPost(data, htmlOnly = false) {
+            if (!htmlOnly) {
+                // Cria Post na Memória (Array/Objeto)
+                twitterLite.posts.push({
+                    id: twitterLite.posts.length + 1,
+                    owner: data.owner,
+                    content: data.content
+                });
+            }
 
             // Cria Post no HTML
             const $listaPosts = document.querySelector('.listaPosts')
             $listaPosts.insertAdjacentHTML('afterbegin', `<li>${data.content}</li>`)
         }
     };
-    
+
     // [ Código de Frontend: Web ]
     const $meuForm = document.querySelector('form')
     //console.log($meuForm)
-    
+
     // CRUD [ Create ]
     $meuForm.addEventListener('submit', function criaPostController(infoDoEvento) {
         infoDoEvento.preventDefault()
         console.log("Estamos criando um post novo")
-        
+
         const $meuInput = document.querySelector('input')
         //const $meuInput = document.querySelector('input[name="iptCriaPost"]')
         //const $meuInput = document.querySelector('input[name="iptCriaPost"]').value
-        
+
         twitterLite.addPost({ owner: 'clarkkent', content: $meuInput.value });
         console.log(twitterLite.posts)
 
@@ -60,8 +62,8 @@
     })
 
     // CRUD [ Read ]
-    twitterLite.posts.forEach(({owner, content}) => {
-        twitterLite.addPost({ owner: 'clarkkent', content: content })
+    twitterLite.posts.forEach(({ owner, content }) => {
+        twitterLite.addPost({ owner: owner, content: content }, true)
     })
 
     // Linguagem Pura
