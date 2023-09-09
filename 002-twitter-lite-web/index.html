@@ -1,0 +1,65 @@
+<form>
+    <input name="iptCriaPost" placeholder="Digite o seu post">
+    <button type="submit">Postar</button>
+
+    <ul class="listaPosts">
+
+    </ul>
+</form>
+
+<script>
+    console.log('Hey, guys! - Part 2');
+    console.log('#Building CRUD (Create, Read, Update, Delete)');
+
+    // Base de Dados
+    const twitterLite = {
+        users: [
+            {
+                username: 'clarkkent',
+            }
+        ],
+        posts: [
+            {
+                id: 1,
+                owner: 'clarkkent',
+                content: 'My first tweet'
+            }
+        ],
+
+        addPost(data) {
+            twitterLite.posts.push({
+                id: twitterLite.posts.length + 1,
+                owner: data.owner,
+                content: data.content
+            });
+        }
+    };
+
+    twitterLite.addPost({ owner: 'clarkkent', content: 'Second tweet' });
+    twitterLite.addPost({ owner: 'clarkkent', content: 'Third tweet' });
+    console.log(twitterLite.posts)
+
+
+    // [ Código de Frontend: Web ]
+    const $meuForm = document.querySelector('form')
+    //console.log($meuForm)
+
+    $meuForm.addEventListener('submit', function criaPostController(infoDoEvento) {
+        infoDoEvento.preventDefault()
+        console.log("Estamos criando um post novo")
+
+        const $meuInput = document.querySelector('input')
+        //const $meuInput = document.querySelector('input[name="iptCriaPost"]')
+        //const $meuInput = document.querySelector('input[name="iptCriaPost"]').value
+        const $listaPosts = document.querySelector('.listaPosts')
+        //alert($meuInput.value)
+        //console.log($listaPosts)
+        $listaPosts.insertAdjacentHTML('afterbegin', `<li>${$meuInput.value}</li>`)
+        $meuInput.value = ''
+    })
+
+    // Linguagem Pura
+    // - Criar variáveis
+    // - Sincronizar o conteúdo das variáveis com o HTML
+    // - Atualizar variáveis
+</script>
