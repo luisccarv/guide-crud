@@ -60,7 +60,9 @@
     })
 
     // CRUD [ Read ]
-    
+    twitterLite.posts.forEach(({owner, content}) => {
+        twitterLite.addPost({ owner: 'clarkkent', content: content })
+    })
 
     // Linguagem Pura
     // - Criar variáveis
