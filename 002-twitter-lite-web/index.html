@@ -26,6 +26,12 @@
             }
         ],
 
+        readPosts() {
+            twitterLite.posts.forEach(({ owner, content }) => {
+                twitterLite.addPost({ owner: owner, content: content }, true)
+            });
+        },
+
         addPost(data, htmlOnly = false) {
             if (!htmlOnly) {
                 // Cria Post na Memória (Array/Objeto)
@@ -38,13 +44,23 @@
 
             // Cria Post no HTML
             const $listaPosts = document.querySelector('.listaPosts')
-            $listaPosts.insertAdjacentHTML('afterbegin', `<li>${data.content}</li>`)
+            $listaPosts.insertAdjacentHTML('afterbegin', `
+                <li>
+                    <button>Delete</button>
+                    ${data.content}
+                </li>
+            `)
         }
     };
 
+    // Linguagem Pura
+    // - Criar variáveis
+    // - Sincronizar o conteúdo das variáveis com o HTML
+    // - Atualizar variáveis
+
     // [ Código de Frontend: Web ]
     const $meuForm = document.querySelector('form')
-    //console.log($meuForm)
+    console.log($meuForm)
 
     // CRUD [ Create ]
     $meuForm.addEventListener('submit', function criaPostController(infoDoEvento) {
@@ -62,12 +78,5 @@
     })
 
     // CRUD [ Read ]
-    twitterLite.posts.forEach(({ owner, content }) => {
-        twitterLite.addPost({ owner: owner, content: content }, true)
-    })
-
-    // Linguagem Pura
-    // - Criar variáveis
-    // - Sincronizar o conteúdo das variáveis com o HTML
-    // - Atualizar variáveis
+    twitterLite.readPosts();
 </script>
