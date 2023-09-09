@@ -1,11 +1,10 @@
 <form>
-    <input name="iptCriaPost" placeholder="Digite o seu post">
+    <input name="iptCriaPost" placeholder="Digite o seu post" />
     <button type="submit">Postar</button>
-
-    <ul class="listaPosts">
-
-    </ul>
 </form>
+
+<ul class="listaPosts">
+</ul>
 
 <script>
     console.log('Hey, guys! - Part 2');
@@ -63,12 +62,12 @@
     console.log($meuForm)
 
     // CRUD [ Create ]
-    $meuForm.addEventListener('submit', function criaPostController(infoDoEvento) {
-        infoDoEvento.preventDefault()
+    $meuForm.addEventListener('submit', function criaPostController(infosDoEvento) {
+        infosDoEvento.preventDefault()
         console.log("Estamos criando um post novo")
 
-        const $meuInput = document.querySelector('input')
-        //const $meuInput = document.querySelector('input[name="iptCriaPost"]')
+        const $meuInput = document.querySelector('input[name="iptCriaPost"]')
+        //const $meuInput = document.querySelector('input')
         //const $meuInput = document.querySelector('input[name="iptCriaPost"]').value
 
         twitterLite.addPost({ owner: 'clarkkent', content: $meuInput.value });
@@ -79,4 +78,12 @@
 
     // CRUD [ Read ]
     twitterLite.readPosts();
+
+    // CRUD [ Update ]
+
+
+    // CRUD [ Delete ]
+    document.querySelector('.listaPosts').addEventListener('click', function (infosDoEvento) {
+        console.log('Houve um click')
+    })
 </script>
