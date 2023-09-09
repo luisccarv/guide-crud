@@ -27,36 +27,40 @@
         ],
 
         addPost(data) {
+            // Cria Post na Memória (Array/Objeto)
             twitterLite.posts.push({
                 id: twitterLite.posts.length + 1,
                 owner: data.owner,
                 content: data.content
             });
+
+            // Cria Post no HTML
+            const $listaPosts = document.querySelector('.listaPosts')
+            $listaPosts.insertAdjacentHTML('afterbegin', `<li>${data.content}</li>`)
         }
     };
-
-    twitterLite.addPost({ owner: 'clarkkent', content: 'Second tweet' });
-    twitterLite.addPost({ owner: 'clarkkent', content: 'Third tweet' });
-    console.log(twitterLite.posts)
-
-
+    
     // [ Código de Frontend: Web ]
     const $meuForm = document.querySelector('form')
     //console.log($meuForm)
-
+    
+    // CRUD [ Create ]
     $meuForm.addEventListener('submit', function criaPostController(infoDoEvento) {
         infoDoEvento.preventDefault()
         console.log("Estamos criando um post novo")
-
+        
         const $meuInput = document.querySelector('input')
         //const $meuInput = document.querySelector('input[name="iptCriaPost"]')
         //const $meuInput = document.querySelector('input[name="iptCriaPost"]').value
-        const $listaPosts = document.querySelector('.listaPosts')
-        //alert($meuInput.value)
-        //console.log($listaPosts)
-        $listaPosts.insertAdjacentHTML('afterbegin', `<li>${$meuInput.value}</li>`)
+        
+        twitterLite.addPost({ owner: 'clarkkent', content: $meuInput.value });
+        console.log(twitterLite.posts)
+
         $meuInput.value = ''
     })
+
+    // CRUD [ Read ]
+    
 
     // Linguagem Pura
     // - Criar variáveis
