@@ -19,23 +19,28 @@
         ],
         posts: [
             {
-                id: 1,
+                //id: 1,
+                id: Date.now(),
                 owner: 'clarkkent',
                 content: 'My first tweet'
             }
         ],
 
         readPosts() {
-            twitterLite.posts.forEach(({ owner, content }) => {
-                twitterLite.addPost({ owner: owner, content: content }, true)
+            twitterLite.posts.forEach(({ id, owner, content }) => {
+                twitterLite.addPost({ id, owner: owner, content: content }, true)
             });
         },
 
         addPost(data, htmlOnly = false) {
+            //const id = twitterLite.posts.length;
+            const idInterno = Date.now();
+
             if (!htmlOnly) {
                 // Cria Post na Memória (Array/Objeto)
                 twitterLite.posts.push({
-                    id: twitterLite.posts.length + 1,
+                    //id: (id + 1),
+                    id: dados.id || idInterno,
                     owner: data.owner,
                     content: data.content
                 });
@@ -44,12 +49,35 @@
             // Cria Post no HTML
             const $listaPosts = document.querySelector('.listaPosts')
             $listaPosts.insertAdjacentHTML('afterbegin', `
-                <li>
-                    <button>Delete</button>
-                    ${data.content}
+                <li data-id="${idInterno}">
+                    <button class="btnDelete">Delete</button>
+                    <span contenteditable>
+                        ${dados.content}
+                    </span>
                 </li>
             `)
+        },
+
+        alterContentPost(id, newContent) {
+            const postToBeUpdated = twitterLite.posts.find((post) => {
+                return post.id === Number(id);
+            });
+
+            console.log(postToBeUpdated)
+
+            postToBeUpdated.content = newContent
+        },
+
+
+        removePost(id) {
+            const listOfUpdatedPosts = twitterLite.posts.filter((currentPost) => {
+                return currentPost.id !== Number(id);
+            })
+
+            console.log(listOfUpdatedPosts)
+            twitterLite.posts = listOfUpdatedPosts;
         }
+
     };
 
     // Linguagem Pura
@@ -80,10 +108,31 @@
     twitterLite.readPosts();
 
     // CRUD [ Update ]
+    document.querySelector('.listaPosts').addEventListener('input', function (infosDoEvento) {
+        console.log('Houve uma digitação');
+        const elementoAtual = infosDoEvento.target;
+        const id = elementoAtual.parentNode.getAttribute('data-id');
+
+        miniRedeSocial.atualizaContentDoPost(id, elementoAtual.innerText)
+    });
 
 
     // CRUD [ Delete ]
     document.querySelector('.listaPosts').addEventListener('click', function (infosDoEvento) {
-        console.log('Houve um click')
+        console.log('Houve um click', infosDoEvento.target);
+        const elementoAtual = infosDoEvento.target
+        const isBtnDeleteClick = infosDoEvento.target.classList.contains('btnDelete');
+
+        if (isBtnDeleteClick) {
+            console.log('Clicou no botao Delete', elementoAtual.parentNode.getAttribute('data-id'))
+            const id = elementoAtual.parentNode.getAttribute('data-id');
+
+            // Manipula o lado do: ServerSide / Banco de Dados / Arquivo / Fonte
+            twitterLite.removePost(id)
+            // Manipula a View / Output / ...
+            elementoAtual.parentNode.remove()
+
+            console.log(twitterLite.posts)
+        }
     })
 </script>
