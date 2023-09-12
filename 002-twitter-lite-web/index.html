@@ -1,18 +1,18 @@
 <form>
-    <input name="campoCriaPost" placeholder="Digite o seu post" />
+    <input name="txtCriaPost" placeholder="Digite o seu post" />
     <button type="submit">Postar</button>
 </form>
-<ul class="listaDePosts">
+<ul class="lstPosts">
 </ul>
 
 
 <script>
-    console.log('Ola pessoas! - Nivel 2');
-    console.log('#ConstruindoCRUDS');
+    console.log('Hey, guys! - Part 2');
+    console.log('#Building CRUD (Create, Read, Update, Delete)');
 
     // Base de Dados [ Modelo ]
-    const miniRedeSocial = {
-        usuarios: [
+    const twitterLite = {
+        users: [
             {
                 username: 'Clark Kent',
             }
@@ -26,27 +26,27 @@
         ],
 
         readPosts() {
-            miniRedeSocial.posts.forEach(({ id, owner, content }) => {
-                miniRedeSocial.criaPost({ id, owner: owner, content: content }, true);
+            twitterLite.posts.forEach(({ id, owner, content }) => {
+                twitterLite.addPost({ id, owner: owner, content: content }, true);
             })
         },
 
-        criaPost(dados, htmlOnly = false) {
-            const idInternoAqui = Date.now();
+        addPost(dados, htmlOnly = false) {
+            const newId = Date.now();
             
             if (!htmlOnly) {
                 // Cria Posts na Memória (Array/Objeto)
-                miniRedeSocial.posts.push({
-                    id: dados.id || idInternoAqui,
+                twitterLite.posts.push({
+                    id: dados.id || newId,
                     owner: dados.owner,
                     content: dados.content
                 });
             }
 
             // Cria Post no HTML
-            const $listaDePosts = document.querySelector('.listaDePosts');
-            $listaDePosts.insertAdjacentHTML('afterbegin', `
-                <li data-id="${idInternoAqui}">
+            const $lstPosts = document.querySelector('.lstPosts');
+            $lstPosts.insertAdjacentHTML('afterbegin', `
+                <li data-id="${newId}">
                     <button class="btn-delete">Delete</button>
                     <span contenteditable>
                         ${dados.content}
@@ -55,22 +55,22 @@
             `);
         },
 
-        apagaPost(id) {
-            const listaDePostsAtualizada = miniRedeSocial.posts.filter((postAtual) => {
-                return postAtual.id !== Number(id);
+        removePost(id) {
+            const listPostsUpdated = twitterLite.posts.filter((postCurrent) => {
+                return postCurrent.id !== Number(id);
             })
 
-            console.log(listaDePostsAtualizada);
-            miniRedeSocial.posts = listaDePostsAtualizada;
+            console.log(listPostsUpdated);
+            twitterLite.posts = listPostsUpdated;
         },
 
-        atualizaContentDoPost(id, novoConteudo) {
-            const postQueVaiSerAtualizado = miniRedeSocial.posts.find((post) => {
+        updateContentPost(id, newContent) {
+            const findPost = twitterLite.posts.find((post) => {
                 return post.id === Number(id);
             });
 
-            console.log(postQueVaiSerAtualizado)
-            postQueVaiSerAtualizado.content = novoConteudo
+            console.log(findPost)
+            findPost.content = newContent
         }
     };
 
@@ -88,18 +88,18 @@
         infosDoEvento.preventDefault();
         console.log('Estamos criando um post novo!')
         
-        const $campoCriaPost = document.querySelector('input[name="campoCriaPost"]');
+        const $txtCriaPost = document.querySelector('input[name="txtCriaPost"]');
 
-        miniRedeSocial.criaPost({ owner: 'Clark Kent', content: $campoCriaPost.value });
+        twitterLite.addPost({ owner: 'Clark Kent', content: $txtCriaPost.value });
 
-        $campoCriaPost.value = '';
+        $txtCriaPost.value = '';
     })
 
     // CRUD: [READ]
-    miniRedeSocial.readPosts();
+    twitterLite.readPosts();
 
     // CRUD: [DELETE]
-    document.querySelector('.listaDePosts').addEventListener('click', function (infosDoEvento) {
+    document.querySelector('.lstPosts').addEventListener('click', function (infosDoEvento) {
         console.log('Houve um click',);
 
         const elementoAtual = infosDoEvento.target;
@@ -110,21 +110,21 @@
             const id = elementoAtual.parentNode.getAttribute('data-id');
 
             // Manipula o lado do ServerSide/Banco De Dados/Arquivo/Fonte!
-            miniRedeSocial.apagaPost(id);
+            twitterLite.removePost(id);
             // Manipula a View/o Ouput e ...
             elementoAtual.parentNode.remove();
 
-            console.log(miniRedeSocial.posts);
+            console.log(twitterLite.posts);
         }
     })
 
     // CRUD: [UPDATE]
-    document.querySelector('.listaDePosts').addEventListener('input', function (infosDoEvento) {
+    document.querySelector('.lstPosts').addEventListener('input', function (infosDoEvento) {
         console.log('Houve uma digitação');
 
         const elementoAtual = infosDoEvento.target;
         const id = elementoAtual.parentNode.getAttribute('data-id');
 
-        miniRedeSocial.atualizaContentDoPost(id, elementoAtual.innerText)
+        twitterLite.updateContentPost(id, elementoAtual.innerText)
     });
 </script>
